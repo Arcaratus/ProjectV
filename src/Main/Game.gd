@@ -7,6 +7,8 @@ extends Node
 # that is to say, another node or script should not access them.
 onready var _pause_menu = $InterfaceLayer/PauseMenu
 
+var reticle = load("res://assets/art/ui/reticle.png")
+
 
 func _init():
     OS.min_window_size = OS.window_size
@@ -19,6 +21,10 @@ func _notification(what):
         if name == "Splitscreen":
             $Black/SplitContainer/ViewportContainer1.free()
             $Black.queue_free()
+
+
+func _ready():
+    Input.set_custom_mouse_cursor(reticle)
 
 
 #func _unhandled_input(event):
