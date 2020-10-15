@@ -15,6 +15,8 @@ onready var sprite = $Sprite
 var _double_jump = true # true if can double jump
 var _fast_fall = false # true if fast falling
 var _sliding = false # true if sliding
+var _lolol = false
+var changes = 0
 
 
 func _ready():
