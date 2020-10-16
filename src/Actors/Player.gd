@@ -15,8 +15,6 @@ onready var sprite = $Sprite
 var _double_jump = true # true if can double jump
 var _fast_fall = false # true if fast falling
 var _sliding = false # true if sliding
-var _lolol = false
-var changes = 0
 
 
 func _ready():
@@ -107,12 +105,14 @@ func get_direction():
     return Vector2(x, y)
 
 
-func get_vel_decay(velocity, direction, speed):
+func calc_horizontal_velocity(velocity, direction, speed):
     if _sliding:
         return 0 if abs(velocity) < 50 else velocity * 0.97
     if direction == 0:
-        return 0 if abs(velocity) < 50 else velocity * 0.88 
-    return clamp(velocity + sign(direction) * 40, -speed, speed)
+        return 0 if abs(velocity) < 50 else velocity * 0.88
+    elif Input.get_action_strength("move_down" + action_suffix) != 0:
+        return 50 * sign(direction)
+    return clamp(velocity + sign(direction) * 20, -speed, speed)
 
 
 # This function calculates a new velocity whenever you need it.
@@ -124,7 +124,7 @@ func calculate_move_velocity(
         is_jump_interrupted
     ):
     var velocity = linear_velocity
-    velocity.x = get_vel_decay(velocity.x, direction.x, speed.x)
+    velocity.x = calc_horizontal_velocity(velocity.x, direction.x, speed.x)
     if direction.y < 0:
         velocity.y = speed.y * direction.y
     if direction.y > 0:
@@ -140,7 +140,7 @@ func calculate_move_velocity(
 func get_new_animation(is_shooting = false, crouching = false):
     var animation_new = ""
     if is_on_floor():
-        animation_new = "run" if abs(_velocity.x) > 0.1 else "crouch" if crouching else "idle"
+        animation_new = "run" if abs(_velocity.x) > 0.1 and not crouching else "crouch" if crouching else "idle"
     else:
         animation_new = "falling" if _velocity.y > 0 else "jumping"
     if is_shooting:

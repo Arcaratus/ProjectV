@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://src/Actors/Player.gd"
+}, {
+"base": "Node",
+"class": "Shooter",
+"language": "GDScript",
+"path": "res://src/Mechanics/Shooting/Shooter.gd"
 } ]
 _global_script_class_icons={
 "Actor": "",
 "GitAPI": "",
-"Player": ""
+"Player": "",
+"Shooter": ""
 }
 
 [application]
