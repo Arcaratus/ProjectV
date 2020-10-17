@@ -9,6 +9,8 @@ onready var _pause_menu = $InterfaceLayer/PauseMenu
 
 var reticle = load("res://assets/art/ui/reticle.png")
 
+var mousepos
+
 
 func _init():
     OS.min_window_size = OS.window_size
@@ -24,10 +26,15 @@ func _notification(what):
 
 
 func _ready():
-    Input.set_custom_mouse_cursor(reticle)
+    Input.set_custom_mouse_cursor(reticle, Input.CURSOR_ARROW, Vector2(32, 32))
 
 
-#func _unhandled_input(event):
+func _input(event):
+    if event is InputEventMouseButton:
+        print("Motion: ", event.position)
+
+func _unhandled_input(event):
+    pass
 #    if event.is_action_pressed("toggle_fullscreen"):
 #        OS.window_fullscreen = not OS.window_fullscreen
 #        get_tree().set_input_as_handled()

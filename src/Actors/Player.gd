@@ -112,7 +112,7 @@ func calc_horizontal_velocity(velocity, direction, speed):
         return 0 if abs(velocity) < 50 else velocity * 0.88
     elif Input.get_action_strength("move_down" + action_suffix) != 0:
         return 50 * sign(direction)
-    return clamp(velocity + sign(direction) * 20, -speed, speed)
+    return clamp(velocity + sign(direction) * 15, -speed, speed)
 
 
 # This function calculates a new velocity whenever you need it.
