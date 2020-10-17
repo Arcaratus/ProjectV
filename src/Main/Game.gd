@@ -11,6 +11,8 @@ var reticle = load("res://assets/art/ui/reticle.png")
 
 var mousepos
 
+var lololol
+
 
 func _init():
     OS.min_window_size = OS.window_size
