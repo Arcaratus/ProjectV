@@ -1,11 +1,11 @@
 class_name Shooter
-extends Node
+extends Position2D
 # Represents a shooter that spawns and shoots stuff
 
 
 onready var base_damage = 1 # Base damage of weapon
 onready var hitstun = 1 # Hitstun applied to enemies when hit
-onready var cooldown = $Cooldown # Cooldown between shots -> if (lastShotTime - currTime) >= cooldown: then shoot
+onready var cooldown = 10 # Cooldown between shots -> if (lastShotTime - currTime) >= cooldown: then shoot
 onready var reload_time = 1 # Total time to reload (for reload animation)
 onready var bullet_life = 10 # Life of the shot before it expires
  
@@ -19,8 +19,9 @@ onready var sound_reload = null
 
 
 # Called when the player shoots the shooter
-func on_shoot(ray = null):
-    pass
+# Returns if cannot shoot
+func on_shoot(ray):
+    return true
     
 
 # Returns the applied relevant falloff calculations to damage

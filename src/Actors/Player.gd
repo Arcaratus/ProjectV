@@ -4,13 +4,11 @@ extends Actor
 
 const FLOOR_DETECT_DISTANCE = 20.0
 
-export(String) var action_suffix = ""
-
 onready var platform_detector = $PlatformDetector
 onready var animation_player = $AnimationPlayer
 #onready var shoot_timer = $ShootAnimation
 onready var sprite = $Sprite
-#onready var gun = sprite.get_node(@"Gun")
+onready var shooter = $ProjShooter
 
 var _double_jump = true # true if can double jump
 var _fast_fall = false # true if fast falling
@@ -20,12 +18,6 @@ var _sliding = false # true if sliding
 func _ready():
     # Static types are necessary here to avoid warnings.
     var camera: Camera2D = $Camera
-    if action_suffix == "_p1":
-        camera.custom_viewport = $"../.."
-    elif action_suffix == "_p2":
-        var viewport: Viewport = $"../../../../ViewportContainer2/Viewport"
-        viewport.world_2d = ($"../.." as Viewport).world_2d
-        camera.custom_viewport = viewport
 
 
 # Physics process is a built-in loop in Godot.
@@ -49,11 +41,11 @@ func _ready():
 func _physics_process(_delta):
     var direction = get_direction()
     
-    var jumped = Input.is_action_just_pressed("jump" + action_suffix)
+    var jumped = Input.is_action_just_pressed(Inputs.JUMP)
     if jumped and not is_on_floor():
         _double_jump = false
         
-    var is_jump_interrupted = Input.is_action_just_released("jump" + action_suffix) and _velocity.y < 0.0
+    var is_jump_interrupted = Input.is_action_just_released(Inputs.JUMP) and _velocity.y < 0.0
     _velocity = calculate_move_velocity(_velocity, direction, speed, is_jump_interrupted)
     if _sliding and _velocity.x == 0:
         _sliding = false
@@ -80,7 +72,7 @@ func _physics_process(_delta):
     # There are many situations like these where you can reuse existing properties instead of
     # creating new variables.
     var is_shooting = false
-    var crouching = Input.get_action_strength("move_down" + action_suffix) != 0
+    var crouching = Input.is_action_pressed(Inputs.DOWN)
     if crouching:
         if is_on_floor() and not _sliding and _velocity.x != 0:
             _sliding = true
@@ -91,8 +83,8 @@ func _physics_process(_delta):
         if is_on_floor() and _sliding and _velocity.x != 0:
             _sliding = false
         
-#    if Input.is_action_just_pressed("shoot" + action_suffix):
-#        is_shooting = gun.shoot(sprite.scale.x)
+    if Input.is_action_just_pressed(Inputs.MOUSE_CLICK_LEFT):
+        is_shooting = shooter.on_shoot(get_node("/root/InputHandler").mouse_pos)
 
     var animation = get_new_animation(is_shooting, crouching)
     if animation != animation_player.current_animation:
@@ -100,8 +92,8 @@ func _physics_process(_delta):
 
 
 func get_direction():
-    var x = Input.get_action_strength("move_right" + action_suffix) - Input.get_action_strength("move_left" + action_suffix)
-    var y = 1 if Input.get_action_strength("move_down" + action_suffix) != 0 else -1 if (is_on_floor() or _double_jump) and Input.is_action_just_pressed("jump" + action_suffix) else 0 # For some reason y is positive going down
+    var x = Input.get_action_strength(Inputs.RIGHT) - Input.get_action_strength(Inputs.LEFT)
+    var y = 1 if Input.is_action_pressed(Inputs.DOWN) else -1 if (is_on_floor() or _double_jump) and Input.is_action_just_pressed(Inputs.JUMP) else 0 # For some reason y is positive going down
     return Vector2(x, y)
 
 
@@ -110,7 +102,7 @@ func calc_horizontal_velocity(velocity, direction, speed):
         return 0 if abs(velocity) < 50 else velocity * 0.97
     if direction == 0:
         return 0 if abs(velocity) < 50 else velocity * 0.88
-    elif Input.get_action_strength("move_down" + action_suffix) != 0:
+    elif Input.get_action_strength(Inputs.DOWN) != 0:
         return 50 * sign(direction)
     return clamp(velocity + sign(direction) * 15, -speed, speed)
 
