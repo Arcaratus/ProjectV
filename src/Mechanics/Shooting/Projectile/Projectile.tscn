@@ -8,7 +8,7 @@
 [sub_resource type="CanvasItemMaterial" id=2]
 
 [node name="Projectile" type="RigidBody2D"]
-mass = 0.204082
+mass = 0.0510204
 gravity_scale = 0.0
 script = ExtResource( 1 )
 

@@ -35,11 +35,14 @@ func get_mouse_pos():
 
 
 func get_current_action():
-    return input_buffer.front()
+    return action_buffer.front()
 
 
 func process_inputs():
     var action = Action.get_input_combo(input_buffer + pressed)
+    if not action == null:
+        action_buffer.append(action)
+        print(action_buffer)
     input_buffer.clear()
 
 
@@ -63,8 +66,8 @@ func process_buffered_action(delta):
         elapsed_move_time += delta
         var current = get_current_action()
         
-        if elapsed_move_time > current.duration:
-            elapsed_move_time -= current.duration
+        if elapsed_move_time > BUFFER_WINDOW:
+            elapsed_move_time -= BUFFER_WINDOW
             action_buffer.pop_front()
     else:
         elapsed_move_time = 0

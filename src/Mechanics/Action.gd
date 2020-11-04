@@ -2,21 +2,21 @@ class_name Action
 extends Node
 
 
-var ATTACK
-var ATTACK_SIDE # Use the facing direction to determine L or R
-var ATTACK_DOWN
-var ATTACK_UP
-var AERIAL_ATTACK
-var AERIAL_ATTACK_SIDE # Use the facing direction to determine L or R
-var AERIAL_ATTACK_DOWN
-var AERIAL_ATTACK_UP
+const ATTACK = "attack"
+const ATTACK_SIDE = "attack_side" # Use the facing direction to determine L or R
+const ATTACK_DOWN = "attack_down"
+const ATTACK_UP = "attack_up"
+const AERIAL_ATTACK = "aerial_attack"
+const AERIAL_ATTACK_SIDE = "aerial_attack_side" # Use the facing direction to determine L or R
+const AERIAL_ATTACK_DOWN = "aerial_attack_down"
+const AERIAL_ATTACK_UP = "aerial_attack_up"
 
-var SPECIAL
-var SPECIAL_SIDE
-var SPECIAL_DOWN
-var SPECIAL_UP
+const SPECIAL = "special"
+const SPECIAL_SIDE = "special_side"
+const SPECIAL_DOWN = "special_down"
+const SPECIAL_UP = "special_up"
 
-var ACTIONS = [ATTACK, ATTACK_SIDE, ATTACK_DOWN, ATTACK_UP, SPECIAL]
+const ACTIONS = [ATTACK, ATTACK_SIDE, ATTACK_DOWN, ATTACK_UP, SPECIAL]
 
 var _duration
 var _startup
@@ -32,7 +32,7 @@ func _init(duration, startup, active_on, endlag):
 
 
 # Returns the inputs that map to an (attack) action
-func get_input_combo(inputs):
+static func get_input_combo(inputs):
     if inputs.has(Inputs.JUMP):
         if inputs.has(Inputs.MOUSE_CLICK_LEFT):
             if inputs.has(Inputs.LEFT) or inputs.has(Inputs.RIGHT):
@@ -42,7 +42,7 @@ func get_input_combo(inputs):
             elif inputs.has(Inputs.UP):
                 return AERIAL_ATTACK_UP
             return AERIAL_ATTACK
-    elif inputs.has(Inputs.MOUSE_CLICK_LEFT):
+    if inputs.has(Inputs.MOUSE_CLICK_LEFT):
         if inputs.has(Inputs.LEFT) or inputs.has(Inputs.RIGHT):
             return ATTACK_SIDE
         elif inputs.has(Inputs.DOWN):
@@ -50,7 +50,7 @@ func get_input_combo(inputs):
         elif inputs.has(Inputs.UP):
             return ATTACK_UP
         return ATTACK
-    elif inputs.has(Inputs.MOUSE_CLICK_RIGHT):
+    if inputs.has(Inputs.MOUSE_CLICK_RIGHT):
         if inputs.has(Inputs.LEFT) or inputs.has(Inputs.RIGHT):
             return SPECIAL_SIDE
         elif inputs.has(Inputs.DOWN):
@@ -58,6 +58,7 @@ func get_input_combo(inputs):
         elif inputs.has(Inputs.UP):
             return SPECIAL_UP
         return SPECIAL
+    return null
                 
 
 

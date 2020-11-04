@@ -25,8 +25,8 @@ func _notification(what):
             $Black.queue_free()
 
 
-#func _ready():
-#    Input.set_custom_mouse_cursor(reticle, Input.CURSOR_ARROW, Vector2(32, 32))
+func _ready():
+    Input.set_custom_mouse_cursor(reticle, Input.CURSOR_ARROW, Vector2(32, 32))
 
 
 func _process(delta):
